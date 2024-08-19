@@ -1,63 +1,20 @@
 //TEST MED STORAGE.JS + LOGIN.JSX
 import React, { useState } from "react";
-import { saveToken, saveDecodedUserData } from "./storage";
 import { useNavigate } from "react-router-dom";
-import fakeAuth from "../utils/fakeAuth";
+import { useAuth } from "./AuthContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+
+  const { login, success, error } = useAuth(); // Hämta login,success, error från context
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch(
-        "https://chatify-api.up.railway.app/auth/token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }),
-        }
-      );
 
-      if (response.ok) {
-        const data = await response.json();
-        const { token, userId, username, avatar } = data;
-
-        // Spara token och användardata i localStorage
-        saveToken(token);
-        const decodedJwt = JSON.parse(
-          atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
-        );
-        saveDecodedUserData(decodedJwt);
-
-        fakeAuth.signIn(() => {
-          setSuccess("Inloggning lyckades! Omdirigerar till chat...");
-          setError("");
-          setTimeout(() => {
-            navigate("/chat");
-          }, 2000);
-        });
-
-        // Redirecta till chatten eller annan sida
-        setSuccess("Inloggning lyckades! Omdirigerar till chat...");
-        setError("");
-        setTimeout(() => {
-          navigate("/chat");
-        }, 2000);
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || "Inloggning misslyckades");
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      setError("Inloggning misslyckades");
-    }
+    // ANVÄND DETTA OM USEAUTH FUNKAR
+    login(username, password);
   };
 
   return (
@@ -86,11 +43,14 @@ const Login = () => {
       </form>
 
       <div className="redirect-to">
-      <button className="btn-home" onClick={() => navigate("/")}>
-        Go Home
-      </button></div>
-      {success && <p style={{ color: "green" }}>{success}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <button className="btn-regiter" onClick={() => navigate("/register")}>
+          Register
+        </button>
+      </div>
+      <div className="success-error-message">
+        <p className="success-message">{success}</p>
+        <p className="error-message">{error}</p>
+      </div>
     </div>
   );
 };

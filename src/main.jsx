@@ -1,11 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
-import App from './components/App';
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router } from "react-router-dom";
+import { AuthProvider } from "./components/AuthContext";
+import App from "./components/App";
+import './styles/index.css';
+import "./styles/SideNav.css";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+// Skapa en root för React
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Rendera appen med AuthProvider och Router
+root.render(
   <Router>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </Router>
 );

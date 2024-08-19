@@ -1,14 +1,12 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import fakeAuth from "./fakeAuth";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../components/AuthContext";
 
-const ProtectedRoutes = () => {
-  console.log("isAuthenticated:", fakeAuth.isAuthenticated); // Debugging
-  return fakeAuth.isAuthenticated ? (
-    <Outlet /> // Render child route element
-  ) : (
-    <Navigate to="/chat" replace state={{ from: "/login" }} /> // Redirect to login page
-  );
+const ProtectedRoutes = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  console.log("isAuthenticated:"); // Debugging
+
+  return isAuthenticated ? children : <Navigate to="/" replace />;
 };
 
 export default ProtectedRoutes;

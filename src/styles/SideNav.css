@@ -1,0 +1,60 @@
+.sidenav {
+  position: fixed;
+  width: 250px;
+  height: 100%;
+  background-color: #111;
+  top: 0;
+  left: -250px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+
+
+.sidenav.open {
+  left: 0;
+}
+
+
+.hamburger {
+  font-size: 30px;
+  cursor: pointer;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  /* Se till att knappen är ovanpå menyn */
+  color: white;
+  background: none;
+  border: none;
+}
+
+.menu {
+  padding: 60px 20px;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu ul li {
+  margin: 20px 0;
+}
+
+.menu ul li a,
+.menu ul li button {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.menu ul li button:hover,
+.menu ul li a:hover {
+  color: #f1f1f1;
+}

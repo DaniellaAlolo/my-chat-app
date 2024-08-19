@@ -1,31 +1,45 @@
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./AuthContext";
+import Login from "./Login";
+import Chat from "./Chat";
+import Register from "./Register";
+import Profile from "./Profile";
 
-import React from 'react';
-import {Routes, Route} from 'react-router-dom';
-import Home from './Home';
-import Login from './Login';
-import Register from './Register';
-import SideNav from './SideNav';
-import Chat from './Chat'
-import ProtectedRoutes from '../utils/ProtectedRoutes';
+import ProtectedRoutes from "../utils/ProtectedRoutes";
 
-
-function App() {
-
+const App = () => {
   return (
-    <>
-      <SideNav/>
-      <div className='MainContainer'>
-      <Routes> {/* Define routes */}
-          <Route path="/" element={<Home/>} /> 
-          <Route path="/login" element={<Login />} /> {/* Login route */}
-          <Route path="/register" element={<Register/>} /> 
-          <Route element={<ProtectedRoutes />}> {/* Protected routes */}
-            <Route path="/chat" element={<Chat />} /> {/* Chat route */}
-          </Route>
+    <AuthProvider>
+      <div className="parent">
+     
+      
+      <div className="app-container">
+        <Routes>
+          <Route path="/" element={<Login />} />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoutes>
+                <Profile />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoutes>
+                <Chat />
+              </ProtectedRoutes>
+            }
+          />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
-    </>
-  )
-}
+      </div>
+    </AuthProvider>
+  );
+};
 
-export default App
+export default App;

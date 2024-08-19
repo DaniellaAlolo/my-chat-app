@@ -33,6 +33,8 @@ const Profile = () => {
         <SideNav /> {/* Lägg till SideNav här för att alltid visa den */}
       </div>
       <h1>Profile</h1>
+      <img src={user?.avatar} alt="User Avatar" className="user-avatar" />
+      <p>{user?.user}</p>
       <form onSubmit={handleUpdateProfile}>
         <div>
           <label>Username:</label>

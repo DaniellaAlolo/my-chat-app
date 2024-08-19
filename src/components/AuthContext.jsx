@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import DOMPurify from "dompurify";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 // Skapa global context som heter AuthContext för delning av data
 const AuthContext = createContext();
@@ -42,6 +43,8 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [usersToInvite, setUsersToInvite] = useState([]);
+  const [conversationId, setConversationId] = useState(uuidv4());
   
   const navigate = useNavigate();
 
@@ -169,7 +172,7 @@ export const AuthProvider = ({ children }) => {
       console.error("Error deleting user:", error);
     }
   };
-
+ //Funktion för utloggning
   const logout = () => {
     sessionStorage.removeItem("token");
     setToken(null);
@@ -192,6 +195,56 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Funktion för att hämta en specifik användare
+  const fetchUserById = async (userId) => {
+    try {
+      const response = await fetch(`https://chatify-api.up.railway.app/users/${userId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Använd token från useAuth
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        return user; // Returnerar användarobjektet om allt gick bra
+      } else {
+        console.error("Failed to fetch user");
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+
+  // Funktion för att bjuda in användare till konversation
+  const inviteUserToConversation = async (userId) => {
+    const user = await fetchUserById(userId); // Hämta användare baserat på userId
+
+    if (user) {
+      setUsersToInvite((prevUsers) => [...prevUsers, user]); // Lägg till användaren i listan
+      try {
+        const response = await fetch(`https://chatify-api.up.railway.app/invite/${userId}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // Använd din JWT token
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ conversationId }), // Skicka med conversationId
+        });
+
+        if (response.ok) {
+          console.log("User invited successfully");
+        } else {
+          console.error("Failed to invite user");
+        }
+      } catch (error) {
+        console.error("Error inviting user:", error);
+      }
+    }
+  };
+
+
   return (
     <AuthContext.Provider
       value={{
@@ -206,6 +259,9 @@ export const AuthProvider = ({ children }) => {
         updateUserProfile,
         fetchUserProfile,
         deleteUser,
+        usersToInvite,
+        inviteUserToConversation,
+        setConversationId, // Exponera setConversationId om du vill kunna uppdatera det från andra komponenter
         success,
         error,
       }}

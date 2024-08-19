@@ -1,9 +1,12 @@
+//CHAT.JSX INNAN INVITES OCH HANTERING AV FLER KONVERSATIONER
+
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import DOMPurify from "dompurify";
 import { useAuth } from "./AuthContext";
 import { v4 as uuidv4 } from "uuid";
 import SideNav from "./SideNav";
+import styles from "../styles/Style.module.css";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -96,7 +99,9 @@ const Chat = () => {
       );
 
       if (response.ok) {
-        setMessages((prevMessages) => prevMessages.filter((msg) => msg.id !== msgID));
+        setMessages((prevMessages) =>
+          prevMessages.filter((msg) => msg.id !== msgID)
+        );
         toast.success("Message deleted successfully!"); // Show success toast
       } else {
         toast.error("Failed to delete message"); // Show error toast
@@ -108,37 +113,44 @@ const Chat = () => {
   };
 
   return (
-    <div className="chat-container">
+    <div className={styles.chatContainer}>
       <div className="header">
         <SideNav /> {/* Lägg till SideNav här för att alltid visa den */}
       </div>
       <div className="chat-page">
         <h1>Chat</h1>
-        <img src={user?.avatar} alt="User Avatar" className="user-avatar" />
-        <p>{user?.user}</p>
-        <div className="messages-list">
+        <img src={user?.avatar} alt="User Avatar" className={styles.userAvatar} />
+        <p>User: {user?.user}</p>
+        <div className={styles.messagesList}>
           {messages.map((msg) => {
             return (
               <div
                 key={msg.id}
-                className={`message ${
+                className={`${styles.message} ${
                   msg.userId === user.userId ? "right" : "left"
                 }`}
               >
-                <p>{msg.text}</p>
-
-                <button
-                  className="btn-delete-message"
-                  onClick={() => handleDeleteMessage(msg.id)}
-                >
-                  ❌
-                </button>
-              </div>
+                <img
+                  src={user.avatar}
+                  alt="User Avatar"
+                  className={styles.userAvatar}
+                />
+                <div className={styles.messageContent}>
+                  <p className={styles.username}>{user.user}</p>
+                  <p>{msg.text}</p>
+                  <button
+                    className={styles.btnDeleteMessage}
+                    onClick={() => handleDeleteMessage(msg.id)}
+                  >
+                    ❌
+                  </button>
+                </div>{" "}
+              </div> 
             );
           })}
         </div>
 
-        <div className="new-message">
+        <div className={styles.newMessage}>
           <textarea
             value={newMessage}
             onChange={handleNewMessageChange}
@@ -150,7 +162,8 @@ const Chat = () => {
           <p className="error-message">{error}</p>
         </div>
       </div>
-      <ToastContainer /> {/* Add ToastContainer to render toast notifications */}
+      <ToastContainer />{" "}
+      {/* Add ToastContainer to render toast notifications */}
     </div>
   );
 };

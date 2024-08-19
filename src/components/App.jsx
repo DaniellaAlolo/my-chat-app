@@ -12,31 +12,29 @@ const App = () => {
   return (
     <AuthProvider>
       <div className="parent">
-     
-      
-      <div className="app-container">
-        <Routes>
-          <Route path="/" element={<Login />} />
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<Login />} />
 
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoutes>
-                <Profile />
-              </ProtectedRoutes>
-            }
-          />
-          <Route
-            path="/chat"
-            element={
-              <ProtectedRoutes>
-                <Chat />
-              </ProtectedRoutes>
-            }
-          />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </div>
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoutes>
+                  <Profile />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoutes>
+                  <Chat />
+                </ProtectedRoutes>
+              }
+            />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </div>
       </div>
     </AuthProvider>
   );

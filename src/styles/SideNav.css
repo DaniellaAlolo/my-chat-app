@@ -1,3 +1,4 @@
+/* Sidenav (Hamburger-meny) */
 .sidenav {
   position: fixed;
   width: 250px;
@@ -9,26 +10,41 @@
   z-index: 1000;
 }
 
-
-
 .sidenav.open {
   left: 0;
 }
 
+/* Backdrop */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999; /* Lägre än sidenav, så den är bakom menyn */
+  display: none; /* Standard är inte synlig */
+}
 
+/* När menyn är öppen, visa backdrop */
+.backdrop.show {
+  display: block;
+}
+
+/* Hamburger-knapp */
 .hamburger {
   font-size: 30px;
   cursor: pointer;
   position: fixed;
   top: 15px;
   left: 15px;
-  z-index: 1001;
-  /* Se till att knappen är ovanpå menyn */
+  z-index: 1001; /* Säkerställ att knappen är ovanpå menyn */
   color: white;
   background: none;
   border: none;
 }
 
+/* Meny innehåll */
 .menu {
   padding: 60px 20px;
 }

@@ -1,4 +1,4 @@
-* {
+/** {
   padding: 0;
   margin: 0;
 }
@@ -84,11 +84,11 @@ button:focus-visible {
   border: 1px solid black;
   padding: 10px;
   margin-bottom: 10px;
-  position: relative; /* Lägg till position relative för knappen */
+  position: relative; /* Lägg till position relative för knappen *//*
 }
 
 .btn-delete-message {
-  position: absolute; /* Använd position absolute för att placera knappen */
+  position: absolute; /* Använd position absolute för att placera knappen *//*
   top: 10px;
   right: 10px;
   background-color: transparent; 
@@ -99,7 +99,44 @@ button:focus-visible {
   padding: 0; 
   line-height: 1; 
 }
-
+/*
 .btn-delete-message:hover {
   background-color: darkred;
 }
+.message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #e5e5e5;
+}
+
+.message.right {
+  justify-content: flex-end;
+}
+
+.message.left {
+  justify-content: flex-start;
+}
+
+.message img.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.message-content {
+  max-width: 70%;
+}
+
+.message-content .username {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.message-content p {
+  margin: 0;
+  word-wrap: break-word;
+}*/

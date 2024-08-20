@@ -5,7 +5,6 @@ import { useAuth } from "./AuthContext";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const { login, success, error } = useAuth(); // Hämta login,success, error från context
   const navigate = useNavigate();
 

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import DOMPurify from "dompurify";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 // Skapa global context som heter AuthContext för delning av data
 const AuthContext = createContext();
@@ -17,10 +17,6 @@ const saveToken = (token) => {
 
 const saveUserData = (userData) => {
   sessionStorage.setItem("userData", JSON.stringify(userData));
-};
-
-export const saveDecodedUserData = (userData) => {
-  saveUserData(userData);
 };
 
 const getToken = () => {
@@ -45,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   const [success, setSuccess] = useState("");
   const [usersToInvite, setUsersToInvite] = useState([]);
   const [conversationId, setConversationId] = useState(uuidv4());
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,6 +58,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Funktion för inlogging
   const login = async (username, password) => {
     try {
       const response = await fetch(
@@ -77,18 +74,22 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        const { token, userId, username, avatar } = data;
 
         // Spara token och användardata i sessionStorage
-        saveToken(token);
+        saveToken(data.token);
         const decodedJwt = JSON.parse(
-          atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+          atob(data.token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
         );
-        saveDecodedUserData(decodedJwt);
+        saveUserData(decodedJwt);
 
         // Spara användarinfo i state
-        setUser({ userId, username, avatar });
-        setToken(token);
+        setUser({
+          id: decodedJwt.id,
+          user: decodedJwt.user,
+          avatar: decodedJwt.avatar,
+          email: decodedJwt.email,
+        });
+        setToken(data.token);
 
         setSuccess("Inloggning lyckades! Omdirigerar till chat...");
         setError("");
@@ -106,17 +107,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  
-
-   // Hämta användarprofil
-   const fetchUserProfile = async () => {
+  // Hämta användarprofil
+  const fetchUserProfile = async () => {
     try {
-      const response = await fetch(`https://chatify-api.up.railway.app/users/${userId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://chatify-api.up.railway.app/users/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -129,38 +131,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Uppdatera användarprofil
-  const updateUserProfile = async (updatedUser) => {
-    try {
-      const response = await fetch(`https://chatify-api.up.railway.app/user`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedUser),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data); // Uppdatera användaren med den nya datan
-      } else {
-        console.error("Failed to update user profile");
-      }
-    } catch (error) {
-      console.error("Error updating user profile:", error);
-    }
-  };
-
   // Radera användare
   const deleteUser = async () => {
     try {
-      const response = await fetch(`https://chatify-api.up.railway.app/users/${userId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const user = getUserData();
+      const response = await fetch(
+        `https://chatify-api.up.railway.app/users/${user.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.ok) {
         logout();
@@ -172,7 +155,7 @@ export const AuthProvider = ({ children }) => {
       console.error("Error deleting user:", error);
     }
   };
- //Funktion för utloggning
+  //Funktion för utloggning
   const logout = () => {
     sessionStorage.removeItem("token");
     setToken(null);
@@ -188,63 +171,6 @@ export const AuthProvider = ({ children }) => {
     return DOMPurify.sanitize(input);
   };
 
-  useEffect(() => {
-    const storedUser = getUserData();
-    if (storedUser) {
-      setUser(storedUser);
-    }
-  }, []);
-
-  // Funktion för att hämta en specifik användare
-  const fetchUserById = async (userId) => {
-    try {
-      const response = await fetch(`https://chatify-api.up.railway.app/users/${userId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`, // Använd token från useAuth
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        const user = await response.json();
-        return user; // Returnerar användarobjektet om allt gick bra
-      } else {
-        console.error("Failed to fetch user");
-      }
-    } catch (error) {
-      console.error("Error fetching user:", error);
-    }
-  };
-
-  // Funktion för att bjuda in användare till konversation
-  const inviteUserToConversation = async (userId) => {
-    const user = await fetchUserById(userId); // Hämta användare baserat på userId
-
-    if (user) {
-      setUsersToInvite((prevUsers) => [...prevUsers, user]); // Lägg till användaren i listan
-      try {
-        const response = await fetch(`https://chatify-api.up.railway.app/invite/${userId}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // Använd din JWT token
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ conversationId }), // Skicka med conversationId
-        });
-
-        if (response.ok) {
-          console.log("User invited successfully");
-        } else {
-          console.error("Failed to invite user");
-        }
-      } catch (error) {
-        console.error("Error inviting user:", error);
-      }
-    }
-  };
-
-
   return (
     <AuthContext.Provider
       value={{
@@ -252,16 +178,12 @@ export const AuthProvider = ({ children }) => {
         token,
         login,
         logout,
-        saveDecodedUserData,
+        saveUserData,
         isAuthenticated,
-        clearAuthData ,
+        clearAuthData,
         sanitizeInput,
-        updateUserProfile,
-        fetchUserProfile,
         deleteUser,
-        usersToInvite,
-        inviteUserToConversation,
-        setConversationId, // Exponera setConversationId om du vill kunna uppdatera det från andra komponenter
+        getUserData,
         success,
         error,
       }}

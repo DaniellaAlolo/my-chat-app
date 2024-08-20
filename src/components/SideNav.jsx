@@ -48,14 +48,17 @@ const SideNav = () => {
         <nav className={styles.menu}>
           <ul>
             <li>
+              <Link to="/chat" onClick={closeMenu}>
+                Chat
+              </Link>
+            </li>
+            <li>
               <Link to="/profile" onClick={closeMenu}>
                 Profile
               </Link>
             </li>
             <li>
-              <button onClick={handleLogout}>
-                Logout
-              </button>
+              <button onClick={handleLogout}>Logout</button>
             </li>
           </ul>
         </nav>

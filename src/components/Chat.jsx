@@ -19,7 +19,7 @@ const Chat = () => {
     const fetchMessages = async () => {
       try {
         const response = await fetch(
-          "https://chatify-api.up.railway.app/messages?",
+          "https://chatify-api.up.railway.app/messages",
           {
             method: "GET",
             headers: {
@@ -119,8 +119,12 @@ const Chat = () => {
       </div>
       <div className="chat-page">
         <h1>Chat</h1>
-        <img src={user?.avatar} alt="User Avatar" className={styles.userAvatar} />
-        <p>User: {user?.user}</p>
+        <img
+          src={user.avatar}
+          alt="User Avatar"
+          className={styles.userAvatar}
+        />
+        <p>User: {user.user}</p>
         <div className={styles.messagesList}>
           {messages.map((msg) => {
             return (
@@ -145,7 +149,7 @@ const Chat = () => {
                     ❌
                   </button>
                 </div>{" "}
-              </div> 
+              </div>
             );
           })}
         </div>

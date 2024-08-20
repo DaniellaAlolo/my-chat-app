@@ -1,3 +1,5 @@
+//REGISTER.JSX INNAN AUTHCONTEXT
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,21 +10,21 @@ const Register = () => {
   const [avatar, setAvatar] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [csrfToken, setCsrfToken] = useState('');
+  const [csrfToken, setCsrfToken] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://chatify-api.up.railway.app/csrf', {
-      method: 'PATCH',
+    fetch("https://chatify-api.up.railway.app/csrf", {
+      method: "PATCH",
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setCsrfToken(data.csrfToken); // Spara token i state
       })
-      .catch(error => {
-        console.error('Failed to fetch CSRF token:', error);
-        setError('Failed to fetch CSRF token.');
+      .catch((error) => {
+        console.error("Failed to fetch CSRF token:", error);
+        setError("Failed to fetch CSRF token.");
       });
   }, []);
 
@@ -31,10 +33,9 @@ const Register = () => {
     e.preventDefault();
 
     try {
-     
       // Skicka registreringsbegäran
       const response = await fetch(
-        'https://chatify-api.up.railway.app/auth/register ',
+        "https://chatify-api.up.railway.app/auth/register ",
         {
           method: "POST",
           headers: {
@@ -112,15 +113,14 @@ const Register = () => {
         <button type="submit">Register</button>
       </form>
 
-     
       <div className="redirect-to">
-      <button className="btn-home" onClick={() => navigate("/")}>
-        
-      </button>
+        <button className="btn-home" onClick={() => navigate("/")}></button>
+      </div>
+      <div className="success-error-message">
+        <p className="success-message">{success}</p>
+        <p className="error-message">{error}</p>
       </div>
     </div>
-
-    
   );
 };
 

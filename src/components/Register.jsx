@@ -11,7 +11,7 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  // Funktion för hantering av registreringsformulär med fetch
+  // Funktion för hantering av registreringsformulär från Context
   const handleRegister = async (e) => {
     e.preventDefault();
 

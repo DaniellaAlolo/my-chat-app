@@ -97,18 +97,22 @@ export const AuthProvider = ({ children }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
+
+        if (errorData.error === "Username or email already exists") {
+          setError("Username or email already exists, Try again");
+        } else {
+          setError(errorData.error || "Registartion failed");
+        }
+        return;
       }
 
       setSuccess("Registrering lyckades! Omdirigerar till login...");
       setError("");
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 1500);
     } catch (error) {
-      setError(error.message || "Registreringen misslyckades. Försök igen.");
       setSuccess("");
-      console.error("Registration failed:", error);
     }
   };
 
@@ -150,7 +154,7 @@ export const AuthProvider = ({ children }) => {
 
         setTimeout(() => {
           navigate("/chat");
-        }, 2000);
+        }, 1500);
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Inloggning misslyckades");
@@ -185,6 +189,7 @@ export const AuthProvider = ({ children }) => {
       console.error("Error deleting user:", error);
     }
   };
+
   //Funktion för utloggning
   const logout = () => {
     sessionStorage.removeItem("token");

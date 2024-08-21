@@ -9,90 +9,97 @@
 
 /* Chat.module.css */
 .chatContainer {
-    background-color: #272754;
-    color: #b2b4cc;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .header {
-    background-color: #2555f4;
-    padding: 10px;
-    color: white;
-  }
-  
-  .messagesList {
-    background-color: #1a1a1a;
-    border-radius: 8px;
-    overflow-y: auto;
-    max-height: 400px;
-    padding: 10px;
-  }
-  
-  .message {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #2a2a2a;
-  }
-  
-  .messageRight {
-    justify-content: flex-end;
-    background-color: #2555f4;
-  }
-  
-  .messageLeft {
-    justify-content: flex-start;
-    background-color: #6c94f8;
-  }
-  
-  .userAvatar {
-    border-radius: 50%;
-    width: 6rem;
-    height: 6rem;
-    margin-right: 10px;
-  }
-  
-  .messageContent {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .username {
-    font-weight: bold;
-    font-size: larger;
-    margin-bottom: 5px;
-  }
-  
-  .newMessage {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .newMessage textarea {
-    resize: none;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #8494c4;
-    margin-bottom: 10px;
-  }
-  
-  .newMessage button {
-    background-color: #2555f4;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  
-  .errorMessage {
-    color: red;
-  }
-  /* Sidenav (Hamburger-meny) */
+  background-color: #272754;
+  color: #b2b4cc;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  background-color: #2555f4;
+  padding: 10px;
+  color: white;
+}
+
+.messagesList {
+  background-color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow-y: auto;
+  max-height: 400px;
+  padding: 10px;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #2a2a2a;
+}
+
+.messageRight {
+  justify-content: flex-end;
+  background-color: #2555f4;
+}
+
+.messageLeft {
+  justify-content: flex-start;
+  background-color: #6c94f8;
+}
+
+.userAvatar {
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  margin-right: 10px;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-weight: bold;
+  font-size: larger;
+  margin-bottom: 5px;
+}
+
+.newMessage {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.newMessage textarea {
+  resize: none;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #8494c4;
+  margin-bottom: 10px;
+}
+
+.newMessage button {
+  background-color: #2555f4;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.successMessage {
+  color: green;
+}
+
+/* Sidenav (Hamburger-meny) */
 .sidenav {
   position: fixed;
   width: 250px;
@@ -115,7 +122,8 @@
   position: fixed;
   top: 15px;
   left: 15px;
-  z-index: 1001; /* Säkerställ att knappen är ovanpå menyn */
+  z-index: 1001;
+  /* Säkerställ att knappen är ovanpå menyn */
   color: white;
   background: none;
   border: none;
@@ -151,4 +159,3 @@
 .menu ul li a:hover {
   color: #f1f1f1;
 }
-

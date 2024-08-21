@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import DOMPurify from "dompurify";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 
 // Skapa global context som heter AuthContext för delning av data
 const AuthContext = createContext();
@@ -35,13 +34,11 @@ const clearAuthData = () => {
 
 // AuthProvider komponent för att ge tillgång till AuthContext till barnkomponenter
 export const AuthProvider = ({ children }) => {
+  const [csrfToken, setCsrfToken] = useState("");
   const [user, setUser] = useState("");
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [usersToInvite, setUsersToInvite] = useState([]);
-  const [conversationId, setConversationId] = useState(uuidv4());
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,6 +54,63 @@ export const AuthProvider = ({ children }) => {
       setUser(storedUser);
     }
   }, []);
+
+  //funktion för registrering av ny användare
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await fetch(
+          "https://chatify-api.up.railway.app/csrf",
+          {
+            method: "PATCH",
+          }
+        );
+        const data = await response.json();
+        setCsrfToken(data.csrfToken); // Spara token i state
+      } catch (error) {
+        console.error("Failed to fetch CSRF token:", error);
+        setError("Failed to fetch CSRF token.");
+      }
+    };
+
+    fetchCsrfToken();
+  }, []);
+
+  const register = async ({ username, password, email, avatar }) => {
+    try {
+      const response = await fetch(
+        "https://chatify-api.up.railway.app/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+            email,
+            avatar,
+            _csrf: csrfToken,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration failed");
+      }
+
+      setSuccess("Registrering lyckades! Omdirigerar till login...");
+      setError("");
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      setError(error.message || "Registreringen misslyckades. Försök igen.");
+      setSuccess("");
+      console.error("Registration failed:", error);
+    }
+  };
 
   // Funktion för inlogging
   const login = async (username, password) => {
@@ -107,30 +161,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Hämta användarprofil
-  const fetchUserProfile = async () => {
-    try {
-      const response = await fetch(
-        `https://chatify-api.up.railway.app/users/${userId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data);
-      } else {
-        console.error("Failed to load user profile");
-      }
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-    }
-  };
-
   // Radera användare
   const deleteUser = async () => {
     try {
@@ -176,6 +206,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         token,
+        register,
         login,
         logout,
         saveUserData,

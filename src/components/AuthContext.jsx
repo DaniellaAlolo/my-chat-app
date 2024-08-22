@@ -149,7 +149,7 @@ export const AuthProvider = ({ children }) => {
         });
         setToken(data.token);
 
-        setSuccess("Inloggning lyckades! Omdirigerar till chat...");
+        setSuccess("Successful login! Redirecting to chat...");
         setError("");
 
         setTimeout(() => {
@@ -157,11 +157,11 @@ export const AuthProvider = ({ children }) => {
         }, 1500);
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Inloggning misslyckades");
+        setError(errorData.message || "Invalid credentials");
       }
     } catch (error) {
       console.error("Login failed:", error);
-      setError("Inloggning misslyckades");
+      setError("Invalid credentials");
     }
   };
 

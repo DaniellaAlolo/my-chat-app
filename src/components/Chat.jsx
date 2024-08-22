@@ -68,7 +68,7 @@ const Chat = () => {
       fetchMessages();
     }
     fetchMessages();
-  }, [token, newMessage]); // Beroende på token & nya meddelanden
+  }, [token]); // Beroende på token & nya meddelanden
 
   const handleNewMessageChange = (e) => {
     setNewMessage(e.target.value);
@@ -95,7 +95,7 @@ const Chat = () => {
 
       if (response.ok) {
         const newMsg = await response.json();
-        setMessages((prevMessages) => [...prevMessages, newMsg]);
+        setMessages((prevMessages) => [...prevMessages, newMsg.latestMessage]);
         setNewMessage(""); // Rensa inputfältet
       } else {
         setError("Failed to send message");
@@ -131,7 +131,6 @@ const Chat = () => {
       }
     } catch (error) {
       console.error("Error deleting message:", error);
-      setError("Error deleting message");
     }
   };
 
@@ -155,8 +154,7 @@ const Chat = () => {
               <div
                 key={msg.id}
                 className={`${styles.message} ${
-                  isUserMessage ? styles.right : styles.left
-                  //msg.username === user.user ? "right" : "left"
+                  isUserMessage ? styles.messageRight : styles.messageLeft
                 }`}
               >
                 <img
@@ -178,7 +176,10 @@ const Chat = () => {
             );
           })}
         </div>
-
+        <div className="success-error-message">
+          <p className="success-message">{success}</p>
+          <p className="error-message">{error}</p>
+        </div>
         <div className={styles.newMessage}>
           <textarea
             value={newMessage}
@@ -186,10 +187,6 @@ const Chat = () => {
             placeholder="Write a message..."
           />
           <button onClick={handleSendMessage}>Send</button>
-        </div>
-        <div className="success-error-message">
-          <p className="success-message">{success}</p>
-          <p className="error-message">{error}</p>
         </div>
       </div>
     </div>

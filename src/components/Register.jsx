@@ -65,7 +65,9 @@ const Register = () => {
       </form>
 
       <div className="redirect-to">
-        <button className="btn-home" onClick={() => navigate("/")}></button>
+        <button className="btn-home" onClick={() => navigate("/")}>
+          Login
+        </button>
       </div>
       <div className="success-error-message">
         <p className="success-message">{success}</p>

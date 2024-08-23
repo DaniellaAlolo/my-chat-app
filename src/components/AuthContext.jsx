@@ -165,6 +165,35 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Uppdatera användarprofil
+  const updateUserProfile = async (updatedUser) => {
+    try {
+      const response = await fetch(`https://chatify-api.up.railway.app/user`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          updatedData: updatedUser,
+        }),
+      });
+
+      if (response.ok) {
+        setUser({ ...user, updatedUser });
+        sessionStorage.setItem(
+          "userData",
+          JSON.stringify({ ...user, updatedUser })
+        );
+      } else {
+        console.error("Failed to update user profile");
+      }
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+    }
+  };
+
   // Radera användare
   const deleteUser = async () => {
     try {
@@ -218,8 +247,11 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         clearAuthData,
         sanitizeInput,
+        updateUserProfile,
         deleteUser,
         getUserData,
+        setSuccess,
+        setError,
         success,
         error,
       }}

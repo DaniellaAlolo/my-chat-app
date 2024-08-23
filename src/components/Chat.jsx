@@ -76,6 +76,8 @@ const Chat = () => {
 
   // Funktion för att skapa nya meddelanden
   const handleSendMessage = async () => {
+    setSuccess("");
+    setError("");
     // Sanitize the message
     const sanitizedMessage = DOMPurify.sanitize(newMessage);
 
@@ -108,6 +110,8 @@ const Chat = () => {
 
   //radera meddelande
   const handleDeleteMessage = async (msgID) => {
+    setSuccess("");
+    setError("");
     console.log("successful deleting comment:", msgID);
 
     try {
@@ -135,58 +139,68 @@ const Chat = () => {
   };
 
   return (
-    <div className={styles.chatContainer}>
-      <div className="header">
-        <SideNav /> {/* Lägg till SideNav här för att alltid visa den */}
+    <div>
+      <div className={styles.userInfoWrapper}>
+        <p className={styles.userInfo}>Welcome to the chat: {user.user}</p>
+        <span>
+          <img
+            src={user.avatar}
+            alt="User Avatar"
+            className={styles.userAvatar}
+          />
+        </span>
       </div>
-      <div className="chat-page">
-        <h1>Chat</h1>
-        <img
-          src={user.avatar}
-          alt="User Avatar"
-          className={styles.userAvatar}
-        />
-        <p>User: {user.user}</p>
-        <div className={styles.messagesList}>
-          {messages.map((msg) => {
-            const isUserMessage = msg.username === user.username; // Kontrollera om meddelandet är från inloggad användare
-            return (
-              <div
-                key={msg.id}
-                className={`${styles.message} ${
-                  isUserMessage ? styles.messageRight : styles.messageLeft
-                }`}
-              >
-                <img
-                  src={msg.avatar || user.avatar}
-                  alt="User Avatar"
-                  className={styles.userAvatar}
-                />
-                <div className={styles.messageContent}>
-                  <p className={styles.username}>{msg.username || user.user}</p>
-                  <p>{msg.text}</p>
+      <div className={styles.chatPage}>
+        <div>
+          <SideNav />
+        </div>
+        <div className={styles.container}>
+          <div className={styles.messagesList}>
+            {messages.map((msg) => {
+              const isUserMessage = msg.username === user.username; // Kontrollera om meddelandet är från inloggad användare
+              return (
+                <div
+                  key={msg.id}
+                  className={`${styles.message} ${
+                    isUserMessage ? styles.messageRight : styles.messageLeft
+                  }`}
+                >
+                  <img
+                    src={msg.avatar || user.avatar}
+                    alt="User Avatar"
+                    className={styles.messageAvatar}
+                  />
+                  <div className={styles.messageContent}>
+                    <p className={styles.username}>
+                      {msg.username || user.user}
+                    </p>
+                    <p className={styles.messageText}>{msg.text}</p>
+                  </div>
                   <button
                     className={styles.btnDeleteMessage}
                     onClick={() => handleDeleteMessage(msg.id)}
                   >
                     ❌
                   </button>
-                </div>{" "}
-              </div>
-            );
-          })}
-        </div>
-        <div className="success-error-message">
-          <p className="success-message">{success}</p>
-          <p className="error-message">{error}</p>
-        </div>
-        <div className={styles.newMessage}>
-          <textarea
-            value={newMessage}
-            onChange={handleNewMessageChange}
-            placeholder="Write a message..."
-          />
-          <button onClick={handleSendMessage}>Send</button>
+                </div>
+              );
+            })}
+          </div>
+          <div className={styles.messageContainer}>
+            <p className={styles.successMessage}>{success}</p>
+            <p className={styles.errorMessage}>{error}</p>
+          </div>
+          <div className={styles.newMessage}>
+            <textarea
+              value={newMessage}
+              onChange={handleNewMessageChange}
+              className={styles.messageInput}
+              placeholder="Write a message..."
+            />
+            <button onClick={handleSendMessage} className={styles.sendBtn}>
+              Send
+            </button>
+          </div>
         </div>
       </div>
     </div>

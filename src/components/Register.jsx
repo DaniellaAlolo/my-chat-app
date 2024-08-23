@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import styles from "../styles/Style.module.css";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -24,54 +25,60 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Registrera Ny Användare</h1>
-      <form onSubmit={handleRegister}>
-        <div>
-          <label>Username:</label>
+      <form className={styles.form} onSubmit={handleRegister}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Username:</label>
           <input
             type="text"
+            className={styles.input}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Password:</label>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Password:</label>
           <input
             type="password"
+            className={styles.input}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label>Email:</label>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Email:</label>
           <input
             type="email"
+            className={styles.input}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div>
-          <label>Avatar (URL):</label>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Avatar (URL):</label>
           <input
             type="text"
+            className={styles.input}
             value={avatar}
             onChange={(e) => setAvatar(e.target.value)}
           />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit" className={styles.button}>
+          Register
+        </button>
       </form>
 
-      <div className="redirect-to">
-        <button className="btn-home" onClick={() => navigate("/")}>
+      <div className={styles.redirektTo}>
+        <button className={styles.registerButton} onClick={() => navigate("/")}>
           Login
         </button>
       </div>
-      <div className="success-error-message">
-        <p className="success-message">{success}</p>
-        <p className="error-message">{error}</p>
+      <div className={styles.messageContainer}>
+        <p className={styles.successMessage}>{success}</p>
+        <p className={styles.errorMessage}>{error}</p>
       </div>
     </div>
   );

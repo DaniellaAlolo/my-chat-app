@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import SideNav from "./SideNav";
 import { useNavigate } from "react-router-dom";
+import styles from "../styles/Style.module.css";
 
 const Profile = () => {
   const { user, updateUserProfile, deleteUser } = useAuth();
@@ -33,46 +34,60 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile-container">
-      <div className="header">
-        <SideNav /> {/* Lägg till SideNav här för att alltid visa den */}
+    <div className={styles.container}>
+      <div>
+        <SideNav />
       </div>
       <h1>Profile</h1>
-      <img src={user.avatar} alt="User Avatar" className="user-avatar" />
-      <p>{user.user}</p>
-      <form onSubmit={handleUpdateProfile}>
-        <div>
-          <label>Username:</label>
+      <div className={styles.userInfoWrapper}>
+        <p className={styles.userInfo}>Update your profile delow</p>
+        <span>
+          <img
+            src={user.avatar}
+            alt="User Avatar"
+            className={styles.profileAvatar}
+          />
+        </span>
+      </div>
+      <form onSubmit={handleUpdateProfile} className={styles.form}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Username:</label>
           <input
             type="text"
             value={username}
+            className={styles.input}
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-        <div>
-          <label>Email:</label>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Email:</label>
           <input
             type="email"
             value={email}
+            className={styles.input}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div>
-          <label>Avatar:</label>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Avatar:</label>
           <input
             type="text"
             value={avatar}
+            className={styles.input}
             onChange={(e) => setAvatar(e.target.value)}
           />
         </div>
-        <button type="submit">Update Profile</button>
+        <button type="submit" className={styles.button}>
+          Update Profile
+        </button>
       </form>
-      <button onClick={handleDeleteAccount} style={{ color: "red" }}>
+
+      <button onClick={handleDeleteAccount} className={styles.deleteAccountBtn}>
         Delete Account
       </button>
-      <button className="btn-regiter" onClick={() => navigate("/chat")}>
+      {/*<button className={styles.chatBtn} onClick={() => navigate("/chat")}>
         Chat
-      </button>
+      </button> */}
     </div>
   );
 };
